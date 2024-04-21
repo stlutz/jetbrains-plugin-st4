@@ -13,6 +13,7 @@ import org.antlr.jetbrains.st4plugin.psi.STTokenTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -23,7 +24,6 @@ public class STSyntaxHighlighter extends SyntaxHighlighterBase {
 
     public static final TextAttributesKey STGroup_TEMPLATE_TEXT =
             createTextAttributesKey("STGroup_TEMPLATE_TEXT", DefaultLanguageHighlighterColors.TEMPLATE_LANGUAGE_COLOR);
-
     private static final List<IElementType> KEYWORDS = Stream.of(
             STLexer.IF, STLexer.ELSE, STLexer.END, STLexer.TRUE,
             STLexer.FALSE, STLexer.ELSEIF, STLexer.ENDIF, STLexer.SUPER
@@ -37,11 +37,14 @@ public class STSyntaxHighlighter extends SyntaxHighlighterBase {
 
     @NotNull
     @Override
-    public TextAttributesKey[] getTokenHighlights(IElementType tokenType) {
+    public TextAttributesKey @NotNull [] getTokenHighlights(IElementType tokenType) {
         TextAttributesKey key;
 
         if (KEYWORDS.contains(tokenType)) {
             key = STGroupSyntaxHighlighter.KEYWORD;
+        } else if (getTokenElementType(STLexer.LDELIM).equals(tokenType)
+                || getTokenElementType(STLexer.RDELIM).equals(tokenType)) {
+            key = STGroupSyntaxHighlighter.DELIMITER;
         } else if (getTokenElementType(STLexer.STRING).equals(tokenType)
                 || getTokenElementType(STLexer.TEXT).equals(tokenType)) {
             key = STGroup_TEMPLATE_TEXT;

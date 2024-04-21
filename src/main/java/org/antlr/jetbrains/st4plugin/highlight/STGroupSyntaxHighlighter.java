@@ -33,6 +33,8 @@ public class STGroupSyntaxHighlighter extends SyntaxHighlighterBase {
             createTextAttributesKey("STGroup_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
     public static final TextAttributesKey STRING =
             createTextAttributesKey("STGroup_STRING", DefaultLanguageHighlighterColors.STRING);
+    public static final TextAttributesKey DELIMITER =
+            createTextAttributesKey("STGroup_DELIMITER", DefaultLanguageHighlighterColors.MARKUP_TAG);
 
     private static final List<IElementType> KEYWORDS = Stream.of(
             STGLexer.DELIMITERS, STGLexer.IMPORT, STGLexer.DEFAULT, STGLexer.KEY, STGLexer.GROUP
@@ -59,7 +61,7 @@ public class STGroupSyntaxHighlighter extends SyntaxHighlighterBase {
             return new TextAttributesKey[]{TEMPLATE_NAME};
         } else if (KEYWORDS.contains(tokenType)) {
             return new TextAttributesKey[]{KEYWORD};
-        } else if (tokenType instanceof TokenIElementType && ((TokenIElementType) tokenType).getANTLRTokenType() == Token.INVALID_TYPE) {
+        } else if (tokenType instanceof TokenIElementType tokenIElementType && tokenIElementType.getANTLRTokenType() == Token.INVALID_TYPE) {
             return new TextAttributesKey[]{HighlighterColors.BAD_CHARACTER};
         }
         return NO_ATTRIBUTES;

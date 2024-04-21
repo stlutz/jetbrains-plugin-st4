@@ -10,7 +10,8 @@ import org.jetbrains.annotations.Nullable;
 
 import static org.antlr.jetbrains.st4plugin.psi.STTokenTypes.getTokenElementType;
 
-public class STBraceMatcher implements PairedBraceMatcher {
+public class
+STBraceMatcher implements PairedBraceMatcher {
 
     private static final BracePair[] PAIRS = {
             new BracePair(getTokenElementType(STLexer.LBRACK), getTokenElementType(STLexer.RBRACK), true),
@@ -21,7 +22,7 @@ public class STBraceMatcher implements PairedBraceMatcher {
 
     @NotNull
     @Override
-    public BracePair[] getPairs() {
+    public BracePair @NotNull [] getPairs() {
         return PAIRS;
     }
 
