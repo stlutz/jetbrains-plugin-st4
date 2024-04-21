@@ -21,9 +21,13 @@ public class STColorSettingsPage implements ColorSettingsPage {
             new AttributesDescriptor("Template Parameter", STGroupSemanticHighlightAnnotator.TEMPLATE_PARAM),
             new AttributesDescriptor("String", STGroupSyntaxHighlighter.STRING),
             new AttributesDescriptor("Keyword", STGroupSyntaxHighlighter.KEYWORD),
+            new AttributesDescriptor("Delimiter", STGroupSyntaxHighlighter.DELIMITER),
             new AttributesDescriptor("Line Comment", STGroupSyntaxHighlighter.LINE_COMMENT),
             new AttributesDescriptor("Block Comment", STGroupSyntaxHighlighter.BLOCK_COMMENT),
-            new AttributesDescriptor("Option", STSemanticHighlightAnnotator.OPTION)
+            new AttributesDescriptor("Option", STSemanticHighlightAnnotator.OPTION),
+            new AttributesDescriptor("Member", STSemanticHighlightAnnotator.MEMBER),
+            new AttributesDescriptor("Expression Tag", STSemanticHighlightAnnotator.EXPR_TAG),
+            new AttributesDescriptor("If Tag", STSemanticHighlightAnnotator.IF_TAG)
     };
 
     @Override
@@ -38,31 +42,33 @@ public class STColorSettingsPage implements ColorSettingsPage {
 
     @Override
     public @NotNull String getDemoText() {
-        return "<comment>/**\n" +
-                " * Multi line comment\n" +
-                " */</comment>\n" +
-                "\n" +
-                "<keyword>delimiters</keyword> \"$\", \"$\"\n" +
-                "\n" +
-                "// single line comment\n" +
-                "myMap ::= [\n" +
-                "    \"key\": \"value\",\n" +
-                "    <keyword>default</keyword>: <keyword>key</keyword>\n" +
-                "]\n" +
-                "\n" +
-                "myTemplate(<param>param1</param>, <param>param2</param>) ::= <<\n" +
-                "    hello, world\n" +
-                "    <comment><! some comment !></comment>\n" +
-                "    <<keyword>if</keyword> (<param>param1</param>)>\n" +
-                "        a\n" +
-                "    <<keyword>elseif</keyword> (<keyword>true</keyword>)>\n" +
-                "        b\n" +
-                "    <<keyword>else</keyword>>\n" +
-                "        <<param>param2</param> <option>separator</option>=\", \">\n" +
-                "    <<keyword>endif</keyword>>\n" +
-                ">>\n" +
-                "\n" +
-                "oneLiner(<param>x</param>) ::= \"hello, <<param>x</param>>\"\n";
+        return """
+                <comment>/**
+                 * Multi line comment
+                 */</comment>
+
+                <keyword>delimiters</keyword> "$", "$"
+
+                // single line comment
+                myMap ::= [
+                    "key": "value",
+                    <keyword>default</keyword>: <keyword>key</keyword>
+                ]
+
+                myTemplate(<param>param1</param>, <param>param2</param>) ::= <<
+                    hello, world
+                    <comment><! some comment !></comment>
+                    <iftag><delimiter><</delimiter><keyword>if</keyword> (<param>param1</param>.<member>member</member>)<delimiter>></delimiter></iftag>
+                        a
+                    <iftag><delimiter><</delimiter><keyword>elseif</keyword> (<keyword>true</keyword>)<delimiter>></delimiter></iftag>
+                        b
+                    <iftag><delimiter><</delimiter><keyword>else</keyword><delimiter>></delimiter></iftag>
+                        <exprtag><delimiter><</delimiter><param>param2</param> <option>separator</option>=", "<delimiter>></delimiter></exprtag>
+                    <iftag><delimiter><</delimiter><keyword>endif</keyword><delimiter>></delimiter></iftag>
+                >>
+
+                oneLiner(<param>x</param>) ::= "hello, <delimiter><</delimiter><param>x</param><delimiter>></delimiter>"
+                """;
     }
 
     @Override
@@ -72,6 +78,10 @@ public class STColorSettingsPage implements ColorSettingsPage {
         tagToDescriptor.put("keyword", STGroupSyntaxHighlighter.KEYWORD);
         tagToDescriptor.put("option", STSemanticHighlightAnnotator.OPTION);
         tagToDescriptor.put("comment", STGroupSyntaxHighlighter.BLOCK_COMMENT);
+        tagToDescriptor.put("delimiter", STGroupSyntaxHighlighter.DELIMITER);
+        tagToDescriptor.put("member", STSemanticHighlightAnnotator.MEMBER);
+        tagToDescriptor.put("iftag", STSemanticHighlightAnnotator.IF_TAG);
+        tagToDescriptor.put("exprtag", STSemanticHighlightAnnotator.EXPR_TAG);
         return tagToDescriptor;
     }
 
