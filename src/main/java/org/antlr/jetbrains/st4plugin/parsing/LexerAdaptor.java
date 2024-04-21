@@ -13,8 +13,8 @@ public abstract class LexerAdaptor extends Lexer {
 
     private final java.util.Queue<Token> queue = new java.util.LinkedList<>();
 
-    private char lDelim = '<';
-    private char rDelim = '>';
+    private char lDelim = '$';
+    private char rDelim = '$';
 
     private int subtemplateDepth;
 
